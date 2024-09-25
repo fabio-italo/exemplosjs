@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Missao Pratica nivel 2</title>
+</head>
+
+<body>
+    <h1>Ordenando Valores</h1>
+    
+    <label>Valor:</label>
+    <input type="number" id="valor" name="valor"><br>
+    <button onclick="add()">Adicionar</button><br>
+
+    <select id="algoritmo" onchange="selecionarAlgoritmo()">
+        <option value="bubble" selected>Bubble Sort</option>
+        <option value="selection">Selection Sort</option>
+        <option value="quick">Quick Sort</option>
+    </select><br>
+       
+    <button onclick="shuffle()">Ordenar</button>
+    <button onclick="bubble_sort()">Misturar</button>
+
+    <h2>Valores Adicionados:</h2>
+    <ul id="lista-valores"></ul>
+</body>
+<script src="ordenando.js" defer></script>
+
+</html>
