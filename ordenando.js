@@ -1,119 +1,106 @@
-var valores = [];
+const numeros = [];
 
-// Função para adicionar valores ao array
+// Função para adicionar valores ao vetor
 function add() {
-    var input = document.getElementById("valor"); //capturando campo de entrada
-    var numero = parseInt(input.value); // convertendo valor em inteiro
+    const input = document.getElementById("numero").value; //capturando campo de entrada
+    const numero = Number(input);
 
-    // Verifica número válido
-    if (!isNaN(numero) && valores.length < 7) {
-        // Adicionando número ao array se não estiver já presente
-        if (valores.indexOf(numero) === -1) {
-            valores.push(numero);
-            alert("Número adicionado: " + numero);
-           
-            // Adiciona o número à lista na página
-            var lista = document.getElementById("lista-valores");
-            var item = document.createElement("li");
-            item.textContent = numero;
-            lista.appendChild(item);
+    if (!isNaN(numero)) {
+        numeros.push(numero);
+        document.getElementById("numero").value = ''; //limpa o cache
+        exibirNumeros();
 
-        } else {
-            alert("Número já adicionado!");
-        }
-    } else if (valores.length >= 7) {
-        alert("Máximo de 7 números atingido!");
     } else {
         alert("Por favor, insira um número válido.");
     }
-
-    // Limpa o campo de entrada
-    input.value = '';
+}
+function exibirNumeros() {
+    const listaValores = document.getElementById("listaValores");
+    listaValores.innerHTML = numeros.map(num => `<li>${num}</li>`).join('');
+}
+function swap(arr, pos1, pos2) {
+    const temp = arr[pos1];
+    arr[pos1] = arr[pos2];
+    arr[pos2] = temp;
 }
 
-// Função para chamar a função selecionada
-function selecionarAlgoritmo() {
-    var algoritmo = document.getElementById("algoritmo").value;
-
-    switch (algoritmo) {
-        case "bubble":
-            bubble_Sort();
-            break;
-        case "selection":
-            selection_Sort();
-            break;
-        case "quick":
-            quick_Sort();
-            break;
-        default:
-            alert("Selecione um algoritmo válido.");
-    }
-}
-
-// FUNÇÃO SWAP 
-const swap = (array, index1, index2) => {
-    [array[index1], array[index2]] = [array[index2], array[index1]];
-};
-
-// FUNÇÃO SHUFFLE - MISTURAR
-const shuffle = (array, swapCount) => {
-    for (let i = 0; i < swapCount; i++) {
-        const index1 = Math.floor(Math.random() * array.length);
-        const index2 = Math.floor(Math.random() * array.length);
-        swap(array, index1, index2);
-    }
-};
-
-// FUNÇÃO BUBBLE SORT - ORDENAR
-const bubble_sort = (array) => {
-    const n = array.length;
+function bubbleSort(arr) {
+    const n = arr.length;
     for (let i = 0; i < n - 1; i++) {
         for (let j = 0; j < n - i - 1; j++) {
-            if (array[j] > array[j + 1]) {
-                swap(array, j, j + 1);
+            if (arr[j] > arr[j + 1]) {
+                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]; // Troca
             }
         }
     }
-    return array;
-};
+    return arr;
+}
 
-// FUNÇÃO SELECTION SORT
-const selection_sort = (array) => {
-    const n = array.length;
+function selectionSort(arr) {
+    const n = arr.length;
     for (let i = 0; i < n - 1; i++) {
         let minIndex = i;
         for (let j = i + 1; j < n; j++) {
-            if (array[j] < array[minIndex]) {
+            if (arr[j] < arr[minIndex]) {
                 minIndex = j;
             }
         }
-        if (minIndex !== i) {
-            swap(array, i, minIndex);
+        [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]]; // Troca
+    }
+    return arr;
+}
+function particionamento(arr, inicio, fim, pivot) {
+    let i = inicio - 1;
+    for (let j = inicio; j < fim; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            swap(arr, i, j);
         }
     }
-    return array;
-};
+    swap(arr, i + 1, fim);
+    return i + 1;
+}
 
-// FUNÇÃO QUICK SORT
-const quick_sort = (array, start = 0, end = array.length - 1) => {
-    if (start < end) {
-        const pivotIndex = partition(array, start, end);
-        quick_sort(array, start, pivotIndex - 1);
-        quick_sort(array, pivotIndex + 1, end);
+function quickSort(arr, inicio, fim) {
+    if (inicio < fim) {
+        const pivotIndex = particionamento(arr, inicio, fim, arr[fim]);
+        quick_sort(arr, inicio, pivotIndex - 1);
+        quick_sort(arr, pivotIndex + 1, fim);
     }
-    return array;
-};
+    return arr;
+}
 
-// FUNÇÃO PARTITION
-const partition = (array, start, end) => {
-    const pivot = array[end];
-    let partitionIndex = start;
-    for (let i = start; i < end; i++) {
-        if (array[i] <= pivot) {
-            swap(array, i, partitionIndex);
-            partitionIndex++;
-        }
+function ordenar() {
+    const algoritmoSelecionado = document.getElementById("algoritmos").value;
+    let arrayParaOrdenar = [...numeros];
+
+    if (algoritmoSelecionado === "bubbleSort") {
+        arrayParaOrdenar = bubbleSort(arrayParaOrdenar);
+    } else if (algoritmoSelecionado === "selectionSort") {
+        arrayParaOrdenar = selectionSort(arrayParaOrdenar);
+    } else if (algoritmoSelecionado === "quickSort") {
+        arrayParaOrdenar = quickSort(arrayParaOrdenar);
+    } else if (algoritmoSelecionado === "swap") {
+        arrayParaOrdenar = swap(arrayParaOrdenar);
+    } else if (algoritmoSelecionado === "particionamento") {
+        arrayParaOrdenar = particionamento(arrayParaOrdenar);
     }
-    swap(array, partitionIndex, end);
-    return partitionIndex;
-};
+
+    const resultados = arrayParaOrdenar.map(num => `<li>${num}</li>`).join('');
+    document.getElementById("resultado").innerHTML = `Números ordenados: <ul>${resultados}</ul>`;
+}
+
+function shuffler() {
+    const listaValores = document.getElementById("listaValores");
+    const valores = Array.from(listaValores.children).map(li => eval(li.innerHTML));
+
+    // Função para embaralhar
+    for (let i = valores.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [valores[i], valores[j]] = [valores[j], valores[i]]; // Troca
+    }
+
+    const novosItens = valores.map(num => `<li>${num}</li>`).join('');
+    listaValores.innerHTML = novosItens;
+    document.getElementById("resultado").innerHTML = `Números misturados: <ul>${novosItens}</ul>`;
+}

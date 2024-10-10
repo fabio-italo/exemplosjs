@@ -5,26 +5,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Missao Pratica nivel 2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+        .button {
+            background-color: blue;
+        }
+    </style>
 </head>
 
 <body>
     <h1>Ordenando Valores</h1>
     
     <label>Valor:</label>
-    <input type="number" id="valor" name="valor"><br>
-    <button onclick="add()">Adicionar</button><br>
+    <input type="number" id="numero" placeholder="Digite um número">
+    <button onclick="add()">Adicionar</button>
 
-    <select id="algoritmo" onchange="selecionarAlgoritmo()">
-        <option value="bubble" selected>Bubble Sort</option>
-        <option value="selection">Selection Sort</option>
-        <option value="quick">Quick Sort</option>
-    </select><br>
+    <select id="algoritmos">
+        <option value="bubbleSort" selected>Bubble Sort</option>
+        <option value="selectionSort">Selection Sort</option>
+        <option value="swap">Swap</option>
+        <option value="particionamento">Particionamento</option>
+        <option value="quickSort">QuickSort</option>
+    </select>
        
-    <button onclick="shuffle()">Ordenar</button>
-    <button onclick="bubble_sort()">Misturar</button>
-
+    <button onclick="ordenar()">Ordenar</button>
+    <button onclick="shuffler()">Misturar</button>
+    
     <h2>Valores Adicionados:</h2>
-    <ul id="lista-valores"></ul>
+    <ul id="listaValores"></ul>
+    
+    <div class="result" id="resultado"></div>
+    
 </body>
 <script src="ordenando.js" defer></script>
 
